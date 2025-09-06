@@ -78,14 +78,19 @@ The key signals involved in this FIFO design are:
 The design is carefully partitioned into six distinct Verilog modules, with boundaries drawn along clock domains.
 
 - **`fifo.v`**: This is the top-level wrapper module that instantiates all the other sub-modules. It connects the different clock domain blocks but would likely be discarded in a larger system design to allow for better grouping of logic by synthesis tools.
-
+![fifo.v](images/fifo_v.png)
 - **`fifomem.v`**: This module represents the FIFO's physical memory, typically an instantiated dual-port synchronous RAM. It is accessed by both the write and read clock domains.
-
+![fifomem.v](images/fifomem_v.png)
 - **`sync_r2w.v`**: This is a simple synchronizer module that passes the read pointer (`rptr`) from the read-clock domain to the write-clock domain. It consists of a chain of registers clocked exclusively by `wclk` to safely transfer the pointer value.
+![sync_r2w.v](images/sync_r2w.png)
 - **`sync_w2r.v`**: Symmetrical to `sync_r2w.v`, this module synchronizes the write pointer (`wptr`) from the write-clock domain into the read-clock domain. It contains only registers clocked by `rclk`.
+![sync_w2r.v](images/sync_w2r.png)
 - **`rptr_empty.v`**: This module contains all logic that is synchronous to the read clock (`rclk`). It includes the read pointer generation logic and the comparison logic to generate the `rempty` flag. The `rempty` flag is asserted when the next value of the read pointer will equal the synchronized write pointer (`rq2_wptr`).
+![rptr_empty.v](images/rptr_empty.png)
 - **`wptr_full.v`**: This module contains all logic synchronous to the write clock (`wclk`). It is responsible for generating the write pointer and the `wfull` flag. The `wfull` flag is asserted based on a comparison between the next value of the write pointer and the synchronized read pointer (`wq2_rptr`).
+![wptr_full.v](images/wptr_full.png)
 - **`fifo_tb.v`**: This testbench verifies an asynchronous FIFO using two different clock speeds for the read and write domains. The main tests include a simple write-then-read sequence.
+![fifo_tb.v](images/waveform.png)
 
 
 
@@ -98,5 +103,6 @@ The design is carefully partitioned into six distinct Verilog modules, with boun
 
 
 ### Code
+
 
 GitHub URL: https://github.com/zsh-is-life/async_fifo
