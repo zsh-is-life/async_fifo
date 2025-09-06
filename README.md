@@ -94,3 +94,9 @@ The design is carefully partitioned into six distinct Verilog modules, with boun
 
 
 [1] C. E. Cummings, “Simulation and Synthesis Techniques for Asynchronous FIFO Design,” in *SNUG San Jose 2002 User Papers*. Sunburst Design, Inc., rev. 1.2, Jun. 2005.
+
+
+
+### Code
+
+GitHub URL: https://github.com/zsh-is-life/async_fifo
