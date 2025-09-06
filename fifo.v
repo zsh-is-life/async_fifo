@@ -6,7 +6,7 @@
 // This module ties together the FIFO memory, read pointer
 // control, write pointer control, and the synchronizers
 // required for safe operation across two clock domains.
-// 
+//
 // Features:
 // - Separate read and write clocks (asynchronous FIFO)
 // - Full and Empty flag generation
@@ -39,8 +39,11 @@ module fifo #(
     // ---------------------------------------------------
     // Synchronize read pointer into write clock domain
     // Ensures write logic sees a stable read pointer
+    // **FIX:** Parameter override corrected from ASIZE to ADDRSIZE
     // ---------------------------------------------------
-    sync_r2w sync_r2w (
+    sync_r2w #(
+        .ADDRSIZE(ASIZE)
+    ) sync_r2w (
         .wq2_rptr(wq2_rptr),
         .rptr    (rptr),
         .wclk    (wclk),
@@ -50,8 +53,11 @@ module fifo #(
     // ---------------------------------------------------
     // Synchronize write pointer into read clock domain
     // Ensures read logic sees a stable write pointer
+    // **FIX:** Parameter override corrected from ASIZE to ADDRSIZE
     // ---------------------------------------------------
-    sync_w2r sync_w2r (
+    sync_w2r #(
+        .ADDRSIZE(ASIZE)
+    ) sync_w2r (
         .rq2_wptr(rq2_wptr),
         .wptr    (wptr),
         .rclk    (rclk),
@@ -79,9 +85,10 @@ module fifo #(
     // Read pointer and Empty flag logic
     // - Generates rptr and raddr
     // - Detects when FIFO is empty
+    // **FIX:** Parameter override corrected from ASIZE to ADDRSIZE
     // ---------------------------------------------------
     rptr_empty #(
-        .ASIZE(ASIZE)
+        .ADDRSIZE(ASIZE)
     ) rptr_empty (
         .rempty   (rempty),
         .raddr    (raddr),
@@ -96,9 +103,10 @@ module fifo #(
     // Write pointer and Full flag logic
     // - Generates wptr and waddr
     // - Detects when FIFO is full
+    // **FIX:** Parameter override corrected from ASIZE to ADDRSIZE
     // ---------------------------------------------------
     wptr_full #(
-        .ASIZE(ASIZE)
+        .ADDRSIZE(ASIZE)
     ) wptr_full (
         .wfull    (wfull),
         .waddr    (waddr),
@@ -110,4 +118,5 @@ module fifo #(
     );
 
 endmodule
+
 
